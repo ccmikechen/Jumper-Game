@@ -1,7 +1,7 @@
 import pygame
 from jumper.resource import R
 from jumper.scene import Scene
-from jumper.ui.information import Information
+from jumper.entities.information import Information
 
 class MenuScene(Scene):
     def setup(self):

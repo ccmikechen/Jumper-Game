@@ -43,9 +43,6 @@ class Game:
         self.start_scene(name, params)
         self.current_scene.reset()
 
-    def _load_resources(self):
-        R.load()
-
     def game_loop(self):
         while self.is_running:
             self.do_events()
@@ -55,7 +52,7 @@ class Game:
     def do_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.on_close_window()
+                self._on_close_window()
             elif event.type == pygame.KEYDOWN:
                 self.current_scene.on_key_down(event.key)
             elif event.type == pygame.KEYUP:
@@ -73,7 +70,7 @@ class Game:
         pygame.display.update()
         self.clock.tick(self.fps)
 
-    def on_close_window(self):
+    def _on_close_window(self):
         self.stop()
 
     def get_fps(self):
@@ -83,3 +80,6 @@ class Game:
 
     def get_bound(self):
         return self.screen.get_size()
+
+    def _load_resources(self):
+        R.load()

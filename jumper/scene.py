@@ -4,6 +4,7 @@ class Scene:
     def __init__(self, game):
         self.game = game
         self.animations = []
+
         self.setup()
 
     def setup(self):

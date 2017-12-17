@@ -3,26 +3,33 @@ from jumper.resource import R
 from random import randint
 from math import sqrt
 from jumper.scene import Scene
+from jumper.entities.environment import Environment
+
+UPDATE_RATE = 0.01
 
 class GameScene(Scene):
     def setup(self):
         self.reset()
-#        self.game_info = GameInfo(self.game.get_bound())
 
     def reset(self):
         self.is_running = True
         self.game_status = None
+        self.last_delta = 0.0
+        self.environment = Environment(self)
 
     def update(self, delta):
-        if self.is_running:
-            pass
-        super().update(delta)
+        if not self.is_running:
+            return
+
+        self.last_delta += delta
+
+        while self.last_delta >= UPDATE_RATE:
+            self.last_delta -= UPDATE_RATE
+            self.environment.update(UPDATE_RATE)
+            super().update(UPDATE_RATE)
 
     def render(self, screen):
         screen.fill((0, 0, 0))
-
-#        background = pygame.transform.scale(R.get_image("dirt"), self.game.get_bound())
-#        screen.blit(background, (0, 0))
 
         if self.game_status != None:
             if self.game_status.status == GAME_OVER:
@@ -30,7 +37,7 @@ class GameScene(Scene):
             elif self.game_status.status == DRAW:
                 self._show_draw_message(screen)
 
-        self.game_info.render(screen)
+        self.environment.render(screen)
         super().render(screen)
 
     def on_key_down(self, key):
@@ -39,28 +46,11 @@ class GameScene(Scene):
                 self.reset()
         if key == pygame.K_BACKSPACE:
             self.start_scene("menu")
-        if key == pygame.K_z:
-            self.player_1.add_snake_length(10)
-        if key == pygame.K_x:
-            self.player_2.add_snake_length(10)
-        if key == pygame.K_d:
-            self.player_1.is_turning_right = True
-        if key == pygame.K_a:
-            self.player_1.is_turning_left = True
-        if key == pygame.K_l:
-            self.player_2.is_turning_right = True
         if key == pygame.K_j:
-            self.player_2.is_turning_left = True
+            self.environment.player_jump()
 
     def on_key_up(self, key):
-        if key == pygame.K_d:
-            self.player_1.is_turning_right = False
-        if key == pygame.K_a:
-            self.player_1.is_turning_left = False
-        if key == pygame.K_l:
-            self.player_2.is_turning_right = False
-        if key == pygame.K_j:
-            self.player_2.is_turning_left = False
+        pass
 
 class GameStatus:
     def __init__(self, status, winner=None, loser=None):
