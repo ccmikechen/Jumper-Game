@@ -27,16 +27,35 @@ class EnvEntity(Entity):
         return self.size
 
     def top(self):
-        return self.position.x + self.size.h
+        return self.position.y + self.size.h
 
     def bottom(self):
-        return self.position.x
-
-    def left(self):
         return self.position.y
 
+    def left(self):
+        return self.position.x
+
     def right(self):
-        return self.position.y + self.size.w
+        return self.position.x + self.size.w
+
+    def is_on(self, entity):
+        return self.is_align_top_with(entity) and\
+               (self.is_align_left_with(entity) or self.is_align_right_with(entity))
+
+    def is_under(self, entity):
+        return entity.is_on(self)
+
+    def is_align_top_with(self, entity):
+        return self.bottom() <= entity.top() and self.bottom() >= entity.bottom()
+
+    def is_align_bottom_with(self, entity):
+        return self.top() >= entity.bottom() and self.top() <= entity.top()
+
+    def is_align_left_with(self, entity):
+        return self.left() <= entity.right() and self.left() >= entity.left()
+
+    def is_align_right_with(self, entity):
+        return self.right() >= entity.left() and self.right() <= entity.right()
 
 class Position:
     def __init__(self, x, y):

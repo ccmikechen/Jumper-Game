@@ -48,9 +48,16 @@ class GameScene(Scene):
             self.start_scene("menu")
         if key == pygame.K_j:
             self.environment.player_jump()
+        if key == pygame.K_LEFT:
+            self.environment.player_start_moving_left()
+        if key == pygame.K_RIGHT:
+            self.environment.player_start_moving_right()
 
     def on_key_up(self, key):
-        pass
+        if key == pygame.K_LEFT:
+            self.environment.player_stop_moving_left()
+        if key == pygame.K_RIGHT:
+            self.environment.player_stop_moving_right()
 
 class GameStatus:
     def __init__(self, status, winner=None, loser=None):
