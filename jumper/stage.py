@@ -36,5 +36,17 @@ class Stage:
     def add_monster(self, monster):
         self.monsters.append(monster)
 
+    def add_pattern(self, pattern):
+        self.platforms.extend(pattern.get_platforms())
+        self.items.extend(pattern.get_items())
+        self.objects.extend(pattern.get_objects())
+        self.monsters.extend(pattern.get_monsters())
+
+    def get_info(self):
+        return self.info
+
     def check_mission(self):
+        pass
+
+    def update(self):
         pass

@@ -9,11 +9,14 @@ class Platform(EnvEntity):
     def update(self, delta):
         pass
 
-    def render(self, surface):
+    def render(self, surface, camera):
+        if not self.is_alive:
+            return
+
         (x, y) = self.get_view_position().int()
         (w, h) = self.get_size().int()
 
-        pygame.draw.rect(surface, self.get_color(), (x, y, w, h))
+        pygame.draw.rect(surface, self.get_color(), (x, y + camera, w, h))
 
     def get_color(self):
         return (0, 0, 255)

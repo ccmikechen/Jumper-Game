@@ -28,6 +28,9 @@ class GameScene(Scene):
             self.environment.update(UPDATE_RATE)
             super().update(UPDATE_RATE)
 
+        if self.environment.is_game_over:
+            self.reset()
+
     def render(self, screen):
         screen.fill((0, 0, 0))
 

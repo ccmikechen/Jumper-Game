@@ -6,11 +6,13 @@ class EnvEntity(Entity):
         (x, y) = position
         self.position = Position(x, y)
         self.size = Size(.0, .0)
+        self.is_alive = True
+        self.is_touchable = True
+        self.is_visible = True
 
     def get_view_position(self):
         (_, height) = self.environment.get_scene().get_bound()
-        new_y = self.position.y - self.environment.get_level()
-        new_y = height - new_y
+        new_y = height - self.position.y
 
         return Position(self.position.x, new_y)
 
@@ -56,6 +58,21 @@ class EnvEntity(Entity):
 
     def is_align_right_with(self, entity):
         return self.right() >= entity.left() and self.right() <= entity.right()
+
+    def is_touch(self, entity):
+        return self.right() >= entity.left() and self.left() <= entity.right() and\
+               self.top() >= entity.bottom() and self.bottom() <= entity.top()
+
+    def set_touchable(enable):
+        self.is_touchable = enable
+
+    def set_visible(enable):
+        self.is_visible = enable
+
+    def destroy(self):
+        self.is_touchable = False
+        self.is_visible = False
+        self.is_alive = False
 
 class Position:
     def __init__(self, x, y):
