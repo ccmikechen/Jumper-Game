@@ -51,11 +51,11 @@ class Player(EnvEntity):
         return self.position
 
     def add_item(self, new_item):
-        for item in self.items:
-            if item.get_type() == 'weapon':
-                self.weapon = item
-                return
+        if new_item.get_type() == 'weapon':
+            self.weapon = new_item
+            return
 
+        for item in self.items:
             if item.get_name() == new_item.get_name():
                 item.reactive(self)
                 return

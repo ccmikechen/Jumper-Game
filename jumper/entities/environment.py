@@ -164,3 +164,14 @@ class Environment(Entity):
             elif self.player.is_touch(m):
                 m.on_touched(self.player)
 
+            self._check_bullets(delta, m)
+
+    def _check_bullets(self, delta, monster):
+        for b in self.bullets:
+            if not b.is_alive:
+                continue
+            
+            if b.is_touch(monster):
+                monster.die()
+                b.destroy()
+                return

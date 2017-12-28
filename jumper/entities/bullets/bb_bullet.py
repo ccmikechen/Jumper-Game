@@ -2,13 +2,16 @@ from jumper.entities.bullet import Bullet
 from math import pi, sin, cos
 
 class BBBullet(Bullet):
-    def __init__(self, environment, position, angle):
+    def __init__(self, environment, position, angle, speed=1000):
         super().__init__(environment, position)
 
-        self.speed = 1000
+        self.speed = speed
         self.angle = angle
 
     def update(self, delta):
+        if not self.is_alive:
+            return
+
         x = self.position.x + self.speed * delta * cos(self.angle / 180 * pi)
         y = self.position.y + self.speed * delta * sin(self.angle / 180 * pi)
 

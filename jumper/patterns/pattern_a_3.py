@@ -3,6 +3,8 @@ from jumper.entities.platforms.normal_platform import NormalPlatform
 from jumper.entities.platforms.weak_platform import WeakPlatform
 from jumper.entities.monsters.slime import Slime
 from jumper.config import config
+from jumper.entities.weapons.bb_gun import BBGun
+from jumper.entities.weapons.bb_shotgun import BBShotgun
 from random import randint
 
 class PatternA3(Pattern):
@@ -24,10 +26,19 @@ class PatternA3(Pattern):
 
             if i - last_level >= 2 or state < 3:
                 self.platforms.append(NormalPlatform(env, (x, y)))
+                self.generate_weapon(env, x, y)
 
                 last_level = i
             elif state < 5:
                 self.generate_monster(env, x, y)
+
+    def generate_weapon(self, env, x, y):
+        p = randint(0, 10)
+
+        if p == 0:
+            self.items.append(BBShotgun(env, (x + 30, y + 30)))
+        elif p == 1:
+            self.items.append(BBGun(env, (x + 30, y + 30)))
 
     def generate_monster(self, env, x, y):
         self.monsters.append(Slime(env, (x + 10, y + 50)))
