@@ -1,10 +1,10 @@
 import pygame
 from jumper.env_entity import EnvEntity
 
-class Item(EnvEntity):
+class Bullet(EnvEntity):
     def __init__(self, environment, position):
         super().__init__(environment, position)
-        self.set_size(30, 30)
+        self.set_size(10, 10)
 
     def update(self, delta):
         pass
@@ -21,30 +21,6 @@ class Item(EnvEntity):
     def get_color(self):
         return (0, 0, 0)
 
-    def get_name(self):
-        return 'item'
-
-    def get_type(self):
-        return 'item'
-
-    def active(self, player):
-        player.add_item(self)
-        self.is_touchable = False
-        self.is_visible = False
-
-    def reactive(self, player):
-        pass
-
-    def destory(self, player):
+    def destory(self):
         super().destroy()
 
-        player.remove_item(self)
-
-    def on_jump(self, player):
-        pass
-
-    def on_drop(self, player):
-        pass
-
-    def on_attack(self, player):
-        pass

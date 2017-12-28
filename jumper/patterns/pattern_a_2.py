@@ -17,29 +17,25 @@ class PatternA2(Pattern):
         self.levels = 30
 
         last_level = -2
-        platforms = []
+
         for i in range(0, 10):
             state = randint(0, 5)
             x = randint(0, int((width - 100) / 50) * 50)
             y = config.LEVEL_HEIGHT * (level + i * 3)
 
             if i - last_level >= 2 or state < 3:
-                platforms.append(NormalPlatform(env, (x, y)))
+                self.platforms.append(NormalPlatform(env, (x, y)))
                 self.generate_item(env, x, y)
 
                 last_level = i
             elif state == 3:
-                platforms.append(WeakPlatform(env, (x, y)))
-
-        self.platforms = platforms
+                self.platforms.append(WeakPlatform(env, (x, y)))
 
     def generate_item(self, env, x, y):
-        items = []
         p = randint(0, 1)
 
         if p == 1:
-            items.append(SpringShoes(env, (x + 30, y + 30)))
+            self.items.append(SpringShoes(env, (x + 30, y + 30)))
         else:
-            items.append(GravityReducer(env, (x + 30, y + 30)))
+            self.items.append(GravityReducer(env, (x + 30, y + 30)))
 
-        self.items = items

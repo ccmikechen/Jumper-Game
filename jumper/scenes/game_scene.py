@@ -47,8 +47,7 @@ class GameScene(Scene):
 
     def on_key_down(self, key):
         if key == pygame.K_SPACE:
-            if not self.is_running:
-                self.reset()
+            self.environment.player_attack()
         if key == pygame.K_BACKSPACE:
             self.start_scene("menu")
         if key == pygame.K_j:

@@ -13,13 +13,8 @@ class Stage2(Stage):
         def generate(self, level):
             if level == 0:
                 return PatternA0(self.env, level)
-            # elif level < 100:
-            #     return PatternA1(self.env, level)
-            # elif level < 200:
-            #     return PatternA2(self.env, level)
             else:
-            #     return PatternA3(self.env, level)
-                return PatternA2(self.env, level)
+                return PatternA3(self.env, level)
 
     def __init__(self, environment):
         super().__init__(environment)

@@ -1,10 +1,10 @@
 import pygame
 from jumper.env_entity import EnvEntity
 
-class Item(EnvEntity):
+class Monster(EnvEntity):
     def __init__(self, environment, position):
         super().__init__(environment, position)
-        self.set_size(30, 30)
+        self.set_size(70, 70)
 
     def update(self, delta):
         pass
@@ -22,29 +22,25 @@ class Item(EnvEntity):
         return (0, 0, 0)
 
     def get_name(self):
-        return 'item'
+        return 'monster'
 
-    def get_type(self):
-        return 'item'
-
-    def active(self, player):
-        player.add_item(self)
-        self.is_touchable = False
-        self.is_visible = False
-
-    def reactive(self, player):
-        pass
-
-    def destory(self, player):
+    def destory(self):
         super().destroy()
 
-        player.remove_item(self)
+    def die(self):
+        self.destroy()
 
-    def on_jump(self, player):
+    def attack(self, player):
         pass
 
-    def on_drop(self, player):
-        pass
+    def on_attacked(self):
+        self.die()
 
-    def on_attack(self, player):
-        pass
+    def on_touched(self, player):
+        player.die()
+        self.environment.game_over()
+
+    def on_steped(self, player):
+        self.die()
+        player.jump()
+

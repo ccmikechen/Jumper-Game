@@ -1,6 +1,7 @@
 import pygame
 from jumper.config import config
 from jumper.env_entity import EnvEntity
+from jumper.entities.weapons.bb_gun import BBGun
 
 class Player(EnvEntity):
     def __init__(self, environment, position):
@@ -11,11 +12,22 @@ class Player(EnvEntity):
         self.is_moving_right = False
         self.items = []
 
+        default_weapon = BBGun(environment, (0, 0))
+        default_weapon.active(self)
+        self.weapon = default_weapon
+
     def jump(self, v=1500):
         self.v = v
 
         for item in self.items:
             item.on_jump(self)
+
+    def die(self):
+        pass
+
+    def attack(self):
+        if self.weapon != None:
+            self.weapon.trigger(self.environment, self)
 
     def start_moving_left(self):
         self.is_moving_left = True
@@ -32,11 +44,18 @@ class Player(EnvEntity):
     def get_v(self):
         return self.v
 
+    def is_dropping(self):
+        return self.v < 0
+
     def pos(self):
         return self.position
 
     def add_item(self, new_item):
         for item in self.items:
+            if item.get_type() == 'weapon':
+                self.weapon = item
+                return
+
             if item.get_name() == new_item.get_name():
                 item.reactive(self)
                 return

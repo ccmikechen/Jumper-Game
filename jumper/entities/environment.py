@@ -14,6 +14,7 @@ class Environment(Entity):
         self.scene = scene
         self.camera = Camera(speed=0.2)
         self.player = Player(self, (200, 200))
+        self.bullets = []
         self.timer = Timer()
         self.reset(stage)
 
@@ -33,19 +34,32 @@ class Environment(Entity):
         config.reset()
 
     def player_jump(self):
+        if self.is_game_over: return
         self.player.jump()
 
     def player_start_moving_left(self):
+        if self.is_game_over: return
         self.player.start_moving_left()
 
     def player_start_moving_right(self):
+        if self.is_game_over: return
         self.player.start_moving_right()
 
     def player_stop_moving_left(self):
+        if self.is_game_over: return
         self.player.stop_moving_left()
 
     def player_stop_moving_right(self):
+        if self.is_game_over: return
         self.player.stop_moving_right()
+
+    def player_attack(self):
+        if self.is_game_over: return
+        self.player.attack()
+
+    def add_bullet(self, bullet):
+        self.bullets = list(filter(lambda b: b.is_alive, self.bullets))
+        self.bullets.append(bullet)
 
     def get_scene(self):
         return self.scene
@@ -53,14 +67,25 @@ class Environment(Entity):
     def get_level(self):
         return self.level
 
+    def game_over(self):
+        self.is_game_over = True
+        print('game over')
+
     def update(self, delta):
         self.timer.update()
         self.stage.update(self.level)
+
         for p in self.stage.get_platforms():
             p.update(delta)
 
         for item in self.stage.get_items():
             item.update(delta)
+
+        for m in self.stage.get_monsters():
+            m.update(delta)
+
+        for b in self.bullets:
+            b.update(delta)
 
         self.player.update(delta)
 
@@ -90,24 +115,31 @@ class Environment(Entity):
         for item in self.stage.get_items():
             item.render(screen, camera_pos)
 
+        for m in self.stage.get_monsters():
+            m.render(screen, camera_pos)
+
+        for b in self.bullets:
+            b.render(screen, camera_pos)
+
         self.player.render(screen, camera_pos)
+
         self.stage.get_info().render(screen)
 
     def _check_player(self, delta):
         if self.player.get_position().y < self.camera.pos():
-            self.is_game_over = True
-            print('game over')
+            self.game_over()
             return
 
         self._check_platforms(delta)
         self._check_items(delta)
+        self._check_monsters(delta)
 
     def _check_platforms(self, delta):
         for p in self.stage.get_platforms():
             if not p.is_touchable:
                 continue
 
-            if self.player.get_v() <= 0:
+            if self.player.is_dropping():
                 if self.player.is_on(p):
                     self.player.get_position().y = p.top()
                     p.active()
@@ -120,3 +152,15 @@ class Environment(Entity):
 
             if self.player.is_touch(item):
                 item.active(self.player)
+
+    def _check_monsters(self, delta):
+        for m in self.stage.get_monsters():
+            if not m.is_touchable:
+                continue
+
+            if self.player.is_on(m):
+                if self.player.is_dropping():
+                    m.on_steped(self.player)
+            elif self.player.is_touch(m):
+                m.on_touched(self.player)
+
