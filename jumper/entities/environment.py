@@ -2,6 +2,7 @@ from pygame import Surface
 from jumper.entity import Entity
 from jumper.entities.player import Player
 from jumper.stages.stage1 import Stage1
+from jumper.stages.stage2 import Stage2
 from jumper.camera import Camera
 from jumper.config import config
 from jumper.timer import Timer
@@ -9,15 +10,27 @@ from jumper.timer import Timer
 DEFAULT_LEVEL = 12
 
 class Environment(Entity):
-    def __init__(self, scene):
+    def __init__(self, scene, stage=1):
         self.scene = scene
         self.camera = Camera(speed=0.2)
-        self.stage = Stage1(self)
         self.player = Player(self, (200, 200))
-        self.level = DEFAULT_LEVEL
         self.timer = Timer()
-        self.timer.start()
+        self.reset(stage)
+
+    def reset(self, stage=None):
+        stage_id = stage[0] if stage != None else 0
+
+        if stage_id == 1:
+            self.stage = Stage1(self)
+        elif stage_id == 2:
+            self.stage = Stage2(self)
+        else:
+            self.stage = Stage1(self)
+
+        self.timer.restart()
         self.is_game_over = False
+        self.level = DEFAULT_LEVEL
+        config.reset()
 
     def player_jump(self):
         self.player.jump()

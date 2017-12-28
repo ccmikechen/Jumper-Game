@@ -10,6 +10,9 @@ class Scene:
     def setup(self):
         raise NotImplementedError()
 
+    def reset(self, params={}):
+        pass
+
     def update(self, delta):
         self._update_animations(delta)
 
@@ -19,8 +22,8 @@ class Scene:
     def start_scene(self, name):
         self.game.start_scene(name)
 
-    def start_and_reset_scene(self, name):
-        self.game.start_and_reset_scene(name)
+    def start_and_reset_scene(self, name, params={}):
+        self.game.start_and_reset_scene(name, params)
 
     def play_animation(self, animation):
         animation.play()

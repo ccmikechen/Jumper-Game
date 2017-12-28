@@ -4,6 +4,9 @@ class Stage:
     def __init__(self, environment):
         self.environment = environment
         self.background = (0, 0, 0)
+        self.reset()
+
+    def reset(self):
         self.platforms = []
         self.items = []
         self.objects = []

@@ -40,8 +40,8 @@ class Game:
         self.current_scene = self.scenes_manager.get_scene_by_name(name)
 
     def start_and_reset_scene(self, name, params={}):
-        self.start_scene(name, params)
-        self.current_scene.reset()
+        self.start_scene(name)
+        self.current_scene.reset(params)
 
     def game_loop(self):
         while self.is_running:

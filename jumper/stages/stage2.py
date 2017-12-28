@@ -5,7 +5,7 @@ from jumper.patterns.pattern_a_2 import PatternA2
 from jumper.patterns.pattern_a_3 import PatternA3
 from jumper.entities.stage_info import StageInfo
 
-class Stage1(Stage):
+class Stage2(Stage):
     class PatternGen:
         def __init__(self, env):
             self.env = env
@@ -23,10 +23,10 @@ class Stage1(Stage):
 
     def __init__(self, environment):
         super().__init__(environment)
-        self.pattern_gen = Stage1.PatternGen(environment)
+        self.pattern_gen = Stage2.PatternGen(environment)
         self.last_level = 0
         self.info = StageInfo()
-        self.background = (100, 100, 100)
+        self.background = (255, 100, 100)
 
     def update(self, level):
         if level > self.last_level - 30:

@@ -11,11 +11,13 @@ class GameScene(Scene):
     def setup(self):
         self.reset()
 
-    def reset(self):
+    def reset(self, params={}):
         self.is_running = True
         self.game_status = None
         self.last_delta = 0.0
-        self.environment = Environment(self)
+
+        stage = params["stage"] if "stage" in params else None
+        self.environment = Environment(self, stage)
 
     def update(self, delta):
         if not self.is_running:
@@ -29,7 +31,7 @@ class GameScene(Scene):
             super().update(UPDATE_RATE)
 
         if self.environment.is_game_over:
-            self.reset()
+            self.start_and_reset_scene("home")
 
     def render(self, screen):
         screen.fill((0, 0, 0))
