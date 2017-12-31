@@ -5,6 +5,7 @@ from jumper.entities.monsters.slime import Slime
 from jumper.config import config
 from jumper.entities.weapons.bb_gun import BBGun
 from jumper.entities.weapons.bb_shotgun import BBShotgun
+from jumper.entities.weapons.bb_wavegun import BBWavegun
 from random import randint
 
 class PatternA3(Pattern):
@@ -36,9 +37,11 @@ class PatternA3(Pattern):
         p = randint(0, 10)
 
         if p == 0:
-            self.items.append(BBShotgun(env, (x + 30, y + 30)))
+            self.items.append(BBShotgun(env, (x + 30, y + 50)))
         elif p == 1:
-            self.items.append(BBGun(env, (x + 30, y + 30)))
+            self.items.append(BBGun(env, (x + 30, y + 50)))
+        else:
+            self.items.append(BBWavegun(env, (x + 30, y + 50)))
 
     def generate_monster(self, env, x, y):
         self.monsters.append(Slime(env, (x + 10, y + 50)))

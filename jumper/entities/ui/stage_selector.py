@@ -1,9 +1,12 @@
+import pygame
 from jumper.entity import Entity
 from jumper.game_helper import show_text
+from jumper.resource import R
 
 WHITE = (255, 255, 255)
-GRAY = (128, 128, 128)
-YELLOW = (255, 255, 0)
+BLACK = (0, 0, 0)
+GRAY = (48, 48, 48)
+YELLOW = (180, 180, 0)
 
 class StageSelector(Entity):
     def __init__(self, stages, position=(0, 0), width=400):
@@ -11,6 +14,18 @@ class StageSelector(Entity):
         self.position = position
         self.width = width
         self.cursor = 0
+
+        self.option_background = R.get_image("menu_option")
+        self.lock_image = R.get_image("lock")
+
+        self._init_cover()
+
+    def _init_cover(self):
+        b_size = self.option_background.get_rect().size
+
+        self.lock_cover = pygame.Surface(b_size)
+        self.lock_cover.set_alpha(200)
+        self.lock_cover.fill(BLACK)
 
     def prev(self):
         self.cursor = (self.cursor - 1) % len(self.stages)
@@ -25,7 +40,7 @@ class StageSelector(Entity):
             self.next()
 
     def get_selected_stage(self):
-        return self.stages[self.cursor]
+        return self.stages[self.cursor][0]
 
     def update(self, delta):
         pass
@@ -33,10 +48,29 @@ class StageSelector(Entity):
     def render(self, surface):
         for i in range(0, len(self.stages)):
             stage = self.stages[i]
-            color = YELLOW if self.cursor == i else WHITE
-            color = GRAY if stage[1] == "locked" else color
+            color = YELLOW if self.cursor == i else GRAY
+
             text = "Stage {}".format(stage[0])
-            x = self.position[0] + (self.width / 2)
+
+            bw, bh = self.option_background.get_rect().size
+            x = self.position[0]
             y = self.position[1] + 150 * i
 
-            show_text(surface, text, color, 50, (x, y), align_hor="center")
+            surface.blit(self.option_background, (x, y))
+            show_text(surface,
+                      text,
+                      color,
+                      50,
+                      (int(x + bw/2), int(y + bh/2)),
+                      align_hor="center",
+                      align_ver="center")
+
+            if stage[1] == "locked":
+                lw, lh = self.lock_image.get_rect().size
+                lx = int(x + (bw - lw) / 2)
+                ly = int(y + (bh - lh) / 2)
+
+                surface.blit(self.lock_cover, (x, y))
+                surface.blit(self.lock_image, (lx, ly))
+
+

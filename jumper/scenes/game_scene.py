@@ -9,6 +9,7 @@ UPDATE_RATE = 0.01
 
 class GameScene(Scene):
     def setup(self):
+        self.environment = None
         self.reset()
 
     def reset(self, params={}):
@@ -30,9 +31,6 @@ class GameScene(Scene):
             self.environment.update(UPDATE_RATE)
             super().update(UPDATE_RATE)
 
-        if self.environment.is_game_over:
-            self.start_and_reset_scene("home")
-
     def render(self, screen):
         screen.fill((0, 0, 0))
 
@@ -46,22 +44,28 @@ class GameScene(Scene):
         super().render(screen)
 
     def on_key_down(self, key):
-        if key == pygame.K_SPACE:
-            self.environment.player_attack()
-        if key == pygame.K_BACKSPACE:
-            self.start_scene("menu")
-        if key == pygame.K_j:
-            self.environment.player_jump()
-        if key == pygame.K_LEFT:
-            self.environment.player_start_moving_left()
-        if key == pygame.K_RIGHT:
-            self.environment.player_start_moving_right()
+        if not self.environment.is_pause:
+            if key == pygame.K_SPACE:
+                self.environment.player_attack()
+            if key == pygame.K_j:
+                self.environment.player_jump()
+            if key == pygame.K_LEFT:
+                self.environment.player_start_moving_left()
+            if key == pygame.K_RIGHT:
+                self.environment.player_start_moving_right()
+
+        if key == pygame.K_p:
+            self.environment.toggle_pause()
+
+        self.environment.key_down(key)
 
     def on_key_up(self, key):
         if key == pygame.K_LEFT:
             self.environment.player_stop_moving_left()
         if key == pygame.K_RIGHT:
             self.environment.player_stop_moving_right()
+
+        self.environment.key_up(key)
 
 class GameStatus:
     def __init__(self, status, winner=None, loser=None):

@@ -1,14 +1,12 @@
 import pygame
 import platform
 
-def show_text(screen, string, color, size, position, align_hor="left", align_ver="top"):
-    font_type = ""
-    if platform.system() == "Linux":
-        font_type = 'Noto Sans CJK SC'
-    elif platform.system() == "Windows":
-        font_type = "DFKai-SB"
+DEFAULT_FONT = 'Noto Sans CJK SC'
+if platform.system() == "Windows":
+    DEFAULT_FONT = 'DFKai-SB'
 
-    font = pygame.font.SysFont(font_type, size)
+def show_text(screen, string, color, size, position, align_hor="left", align_ver="top"):
+    font = pygame.font.SysFont(DEFAULT_FONT, size)
     text = font.render(string, 1, color)
     text_size = font.size(string)
 
@@ -26,5 +24,10 @@ def show_text(screen, string, color, size, position, align_hor="left", align_ver
         aligned_y -= text_size[1]
 
     screen.blit(text, (aligned_x, aligned_y))
+
+def text_size(string, size):
+    font = pygame.font.SysFont(DEFAULT_FONT, size)
+
+    return font.size(string)
 
 

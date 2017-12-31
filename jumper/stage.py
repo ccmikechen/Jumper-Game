@@ -1,8 +1,10 @@
 from jumper.entities.platforms.normal_platform import NormalPlatform
+from jumper.entities.stage_info import StageInfo
 
 class Stage:
     def __init__(self, environment):
         self.environment = environment
+        self.info = StageInfo(environment.counter)
         self.background = (0, 0, 0)
         self.reset()
 
@@ -11,6 +13,9 @@ class Stage:
         self.items = []
         self.objects = []
         self.monsters = []
+
+    def get_id(self):
+        return self.id
 
     def get_background(self):
         return self.background
@@ -48,8 +53,16 @@ class Stage:
     def get_info(self):
         return self.info
 
-    def check_mission(self):
-        pass
+    def get_next_stage(self):
+        return None
+
+    def check_mission(self, counter):
+        return False
+
+    def get_mission_message(self):
+        return ""
 
     def update(self):
-        pass
+        camera_pos = self.environment.camera.pos()
+
+        self.platforms = list(filter(lambda p: p.get_position().y > camera_pos, self.platforms))

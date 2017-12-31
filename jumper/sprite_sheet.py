@@ -1,10 +1,9 @@
 import pygame
-from jumper.resource import R
 
 class SpriteSheet(pygame.sprite.Sprite):
-    def __init__(self, image_name, frame_size):
+    def __init__(self, image, frame_size):
         super().__init__()
-        self.sprite_sheet = R.get_image(image_name)
+        self.sprite_sheet = image
         self.frame_width = frame_size[0]
         self.frame_height = frame_size[1]
 

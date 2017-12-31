@@ -28,6 +28,7 @@ class Timer:
         self.is_paused = True
 
     def resume(self):
+        self.last_time = int(round(time.time()))
         self.is_paused = False
 
     def update(self):

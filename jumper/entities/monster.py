@@ -2,9 +2,11 @@ import pygame
 from jumper.env_entity import EnvEntity
 
 class Monster(EnvEntity):
-    def __init__(self, environment, position):
+    def __init__(self, environment, position, name):
         super().__init__(environment, position)
         self.set_size(70, 70)
+        self.name = name
+        environment.counter.inc_monster_appear(self.get_name())
 
     def update(self, delta):
         pass
@@ -14,21 +16,26 @@ class Monster(EnvEntity):
             return
 
         (x, y) = self.get_view_position().int()
+
+        self.render_monster(surface, (x, y + camera))
+
+    def render_monster(self, surface, position):
         (w, h) = self.get_size().int()
 
-        pygame.draw.rect(surface, self.get_color(), (x, y + camera, w, h))
+        pygame.draw.rect(surface, self.get_color(), (x, y, w, h))
 
     def get_color(self):
         return (0, 0, 0)
 
     def get_name(self):
-        return 'monster'
+        return self.name
 
     def destory(self):
         super().destroy()
 
     def die(self):
         self.destroy()
+        self.environment.counter.inc_monster_die(self.get_name())
 
     def attack(self, player):
         pass

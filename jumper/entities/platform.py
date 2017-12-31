@@ -5,6 +5,7 @@ class Platform(EnvEntity):
     def __init__(self, environment, position):
         super().__init__(environment, position)
         self.set_size(100, 30)
+        self.image = None
 
     def update(self, delta):
         pass
@@ -16,10 +17,16 @@ class Platform(EnvEntity):
         (x, y) = self.get_view_position().int()
         (w, h) = self.get_size().int()
 
-        pygame.draw.rect(surface, self.get_color(), (x, y + camera, w, h))
+        if self.get_image() == None:
+            pygame.draw.rect(surface, self.get_color(), (x, y + camera, w, h))
+        else:
+            surface.blit(self.image, (x, y + camera))
 
     def get_color(self):
         return (0, 0, 255)
+
+    def get_image(self):
+        return self.image
 
     def active(self):
         pass

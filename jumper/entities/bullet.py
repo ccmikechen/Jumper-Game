@@ -14,9 +14,14 @@ class Bullet(EnvEntity):
             return
 
         (x, y) = self.get_view_position().int()
+
+        self.render_bullet(surface, (x, y + camera))
+
+    def render_bullet(self, surface, position):
+        (x, y) = position
         (w, h) = self.get_size().int()
 
-        pygame.draw.rect(surface, self.get_color(), (x, y + camera, w, h))
+        pygame.draw.rect(surface, self.get_color(), (x, y, w, h))
 
     def get_color(self):
         return (0, 0, 0)

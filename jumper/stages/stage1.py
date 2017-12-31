@@ -3,7 +3,7 @@ from jumper.patterns.pattern_a_0 import PatternA0
 from jumper.patterns.pattern_a_1 import PatternA1
 from jumper.patterns.pattern_a_2 import PatternA2
 from jumper.patterns.pattern_a_3 import PatternA3
-from jumper.entities.stage_info import StageInfo
+from jumper.resource import R
 
 class Stage1(Stage):
     class PatternGen:
@@ -25,12 +25,21 @@ class Stage1(Stage):
         super().__init__(environment)
         self.pattern_gen = Stage1.PatternGen(environment)
         self.last_level = 0
-        self.info = StageInfo()
-        self.background = (100, 100, 100)
+        self.background = R.get_image("stage1_bg")
+        self.id = 1
 
     def update(self, level):
+        super().update()
         if level > self.last_level - 30:
             pattern = self.pattern_gen.generate(self.last_level)
             self.add_pattern(pattern)
             self.last_level += pattern.get_levels()
 
+    def check_mission(self, counter):
+        return counter.get_level() > 1000
+
+    def get_mission_message(self):
+        return "Go to 2000 level"
+
+    def get_next_stage_id(self):
+        return 2

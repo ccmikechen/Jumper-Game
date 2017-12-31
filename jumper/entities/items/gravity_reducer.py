@@ -1,18 +1,17 @@
+import pygame
 from jumper.entities.item import Item
 from jumper.timer import Timer
 from jumper.config import config
+from jumper.resource import R
 
 class GravityReducer(Item):
     def __init__(self, environment, position):
-        super().__init__(environment, position)
-
+        super().__init__(environment, position, 'Gravity Reducer')
         self.timer = Timer()
+        self.image = pygame.transform.scale(R.get_image("gravity_reducer"), self.size.int())
 
     def get_color(self):
         return (255, 0, 0)
-
-    def get_name(self):
-        return 'Gravity Reducer'
 
     def render(self, surface, camera):
         super().render(surface, camera)

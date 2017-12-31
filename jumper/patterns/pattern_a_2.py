@@ -32,10 +32,10 @@ class PatternA2(Pattern):
                 self.platforms.append(WeakPlatform(env, (x, y)))
 
     def generate_item(self, env, x, y):
-        p = randint(0, 1)
+        p = randint(0, 20)
 
-        if p == 1:
-            self.items.append(SpringShoes(env, (x + 30, y + 30)))
-        else:
-            self.items.append(GravityReducer(env, (x + 30, y + 30)))
+        if p == 0:
+            self.items.append(SpringShoes(env, (x + 30, y + 50)))
+        elif p == 1:
+            self.items.append(GravityReducer(env, (x + 30, y + 50)))
 
