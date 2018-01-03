@@ -26,6 +26,7 @@ class Stage4(Stage):
         self.pattern_gen = Stage4.PatternGen(environment)
 
         self.background = R.get_image("stage4_bg")
+        self.music = "stage4"
         self.id = 4
         config.G = 4.0
 
@@ -37,5 +38,3 @@ class Stage4(Stage):
     def get_mission_message(self):
         return ["Find 10 coins", "Kill 10 monsters", "Go to level 1000"]
 
-    def get_next_stage_id(self):
-        return None

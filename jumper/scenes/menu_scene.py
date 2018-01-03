@@ -12,7 +12,7 @@ class MenuScene(Scene):
         db = Database()
         stages = db.get_stages()
 
-        self.selector = StageSelector(stages, (100, 200), 480)
+        self.selector = StageSelector(stages, (100, 100), 480)
         R.play_music("home")
 
     def update(self, delta):

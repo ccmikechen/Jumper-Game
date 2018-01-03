@@ -28,6 +28,7 @@ class Stage3(Stage):
         self.pattern_gen = Stage3.PatternGen(environment)
 
         self.background = R.get_image("stage3_bg")
+        self.music = "stage3"
         self.id = 3
 
     def check_mission(self, counter):

@@ -11,7 +11,7 @@ class HomeScene(Scene):
         self.background = Background(R.get_image("home_bg"), self.get_bound())
         self.information_ui = Information()
 
-    def reset(self, params):
+    def reset(self, params={}):
         R.play_music("home")
 
     def update(self, delta):

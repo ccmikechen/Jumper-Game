@@ -38,12 +38,12 @@ class PatternC1(Pattern):
                 self.platforms.append(WeakPlatform(env, (x, y)))
 
     def generate_item(self, env, x, y):
-        p = randint(0, 150)
+        p = randint(0, 100)
 
         if p < 2:
             self.items.append(SpringShoes(env, (x + 30, y + 50)))
         elif p < 4:
             self.items.append(GravityReducer(env, (x + 30, y + 50)))
-        elif p < 20:
+        elif p < 15:
             self.monsters.append(Slime(env, (x + 10, y + 60)))
 

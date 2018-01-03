@@ -16,4 +16,5 @@ class JumperGame(Game):
 
     def start(self):
         self.current_scene = self.scenes_manager.get_scene_by_name("home")
+        self.current_scene.reset()
         super().start()

@@ -6,6 +6,7 @@ from jumper.stages.stage1 import Stage1
 from jumper.stages.stage2 import Stage2
 from jumper.stages.stage3 import Stage3
 from jumper.stages.stage4 import Stage4
+from jumper.stages.stage5 import Stage5
 from jumper.camera import Camera
 from jumper.config import config
 from jumper.timer import Timer
@@ -33,7 +34,9 @@ class Environment(Entity):
 
     def reset(self, stage=None):
         self.counter.reset()
+        R.stop_music()
         config.reset()
+        self.camera.set_speed(0.2)
 
         stage_id = stage if stage != None else 1
 
@@ -45,8 +48,11 @@ class Environment(Entity):
             self.stage = Stage3(self)
         elif stage_id == 4:
             self.stage = Stage4(self)
+        elif stage_id == 5:
+            self.stage = Stage5(self)
+            self.player.jump(v=500)
+            self.camera.set_speed(0.05)
 
-#        R.play_music(self.stage.get_music(), loops=1)
         self.timer.restart()
 
         self.is_pause = False
@@ -148,6 +154,9 @@ class Environment(Entity):
             return
 
     def update(self, delta):
+        if self.start_counter.is_finished():
+            R.play_music(self.stage.get_music())
+
         if self.is_clear or self.is_game_over:
             self.ranking_frame.update(delta)
             return

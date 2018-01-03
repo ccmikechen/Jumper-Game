@@ -78,12 +78,19 @@ class Resource:
                                            (stage3_bg_size[0] * 2, stage3_bg_size[1] * 2))
         self.images["stage3_bg"] = stage3_bg
 
-        # Stage3 background
+        # Stage4 background
         stage4_bg = pygame.image.load("jumper/images/stage4_bg.jpg")
         stage4_bg_size = stage4_bg.get_rect().size
         stage4_bg = pygame.transform.scale(stage4_bg,
                                            (stage4_bg_size[0] * 2, stage4_bg_size[1] * 2))
         self.images["stage4_bg"] = stage4_bg
+
+        # Stage5 background
+        stage5_bg = pygame.image.load("jumper/images/stage5_bg.jpg")
+        stage5_bg_size = stage5_bg.get_rect().size
+        stage5_bg = pygame.transform.scale(stage5_bg,
+                                           (stage5_bg_size[0] * 2, stage5_bg_size[1] * 2))
+        self.images["stage5_bg"] = stage5_bg
 
         # Platforms
         self.images["platform1"] = pygame.image.load("jumper/images/platform1.png")
@@ -126,9 +133,12 @@ class Resource:
         self.sounds["slime_step"] = pygame.mixer.Sound("jumper/sounds/slime_step.wav")
 
     def _load_music(self):
-        self.music["home"] = "jumper/music/home_bgm.mp3"
-        self.music["stage1"] = "jumper/music/stage1_bgm.mp3"
-        self.music["stage2"] = "jumper/music/stage2_bgm.mp3"
+        self.music["home"] = "jumper/music/home.ogg"
+        self.music["stage1"] = "jumper/music/stage1.ogg"
+        self.music["stage2"] = "jumper/music/stage2.ogg"
+        self.music["stage3"] = "jumper/music/stage3.ogg"
+        self.music["stage4"] = "jumper/music/stage4.ogg"
+        self.music["stage5"] = "jumper/music/stage5.ogg"
 
     def get_image(self, name):
         try:
@@ -153,6 +163,7 @@ class Resource:
         try:
             self.sounds[name].set_volume(volume)
             self.sounds[name].play()
+            pass
         except:
             print("Sound " + name + " not found")
 
@@ -160,13 +171,17 @@ class Resource:
         if not replay and self.music_playing == name:
             return
 
+        pygame.mixer.music.stop()
         try:
-            pygame.mixer.music.stop()
             pygame.mixer.music.load(self.music[name])
             pygame.mixer.music.play(loops=loops)
             self.music_playing = name
         except:
             print("Music " + name + " not found")
             pygame.quit()
+
+    def stop_music(self):
+        pygame.mixer.music.stop()
+        self.music_playing = None
 
 R = Resource()
