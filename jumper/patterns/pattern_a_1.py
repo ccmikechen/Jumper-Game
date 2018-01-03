@@ -15,8 +15,8 @@ class PatternA1(Pattern):
 
         platforms = []
         for i in range(0, 10):
-            x = randint(0, int((width - 100) / 50) * 50)
-            y = config.LEVEL_HEIGHT * (level + i * 3)
+            (x, y) = self.get_random_position(level + i * 3)
+
             platforms.append(NormalPlatform(env, (x, y)))
 
         self.platforms = platforms

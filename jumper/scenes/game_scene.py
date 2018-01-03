@@ -10,7 +10,6 @@ UPDATE_RATE = 0.01
 class GameScene(Scene):
     def setup(self):
         self.environment = None
-        self.reset()
 
     def reset(self, params={}):
         self.is_running = True

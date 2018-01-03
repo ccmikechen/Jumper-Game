@@ -11,4 +11,5 @@ class NormalPlatform(Platform):
         return (0, 128, 255)
 
     def active(self):
-        self.environment.player.jump(v=1500)
+        if self.is_touchable and self.is_alive:
+            self.environment.player.jump(v=1500)

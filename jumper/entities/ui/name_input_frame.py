@@ -13,6 +13,7 @@ class NameInputFrame(Entity):
     def __init__(self, size, position):
         self.size = size
         self.position = position
+        self.is_new_record = False
         self.surface = pygame.Surface(self.size)
 
         self.background = pygame.transform.scale(R.get_image("black_board"), self.size)
@@ -46,6 +47,9 @@ class NameInputFrame(Entity):
     def key_up(self, key):
         self.name_input.key_up(key)
 
+    def set_is_new_record(self, b):
+        self.is_new_record = b
+
     def update(self, delta):
         self.name_input.update(delta)
 
@@ -60,12 +64,20 @@ class NameInputFrame(Entity):
     def _render_title(self):
         x = self.size[0]/2
 
-        show_text(self.surface,
-                  "New record!",
-                  YELLOW,
-                  50,
-                  (x, 60),
-                  align_hor="center")
+        if self.is_new_record:
+            show_text(self.surface,
+                      "New record!",
+                      YELLOW,
+                      50,
+                      (x, 60),
+                      align_hor="center")
+        else:
+            show_text(self.surface,
+                      "Mission clear!",
+                      WHITE,
+                      50,
+                      (x, 60),
+                      align_hor="center")
 
         show_text(self.surface,
                   "Spent time:",

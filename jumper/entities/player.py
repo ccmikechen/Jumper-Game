@@ -18,17 +18,25 @@ class Player(EnvEntity):
         self.animation = NinjaAnimetion(self.size.int())
 
         default_weapon = BBGun(environment, (0, 0))
-        default_weapon.active(self)
+        default_weapon.active(self, sound=False)
         self.weapon = default_weapon
+
+        self.is_unbeatable = False
+
+    def toggle_unbeatable(self):
+        self.is_unbeatable = not self.is_unbeatable
+        self.animation.update_is_unbeatable(self.is_unbeatable)
 
     def jump(self, v=1500):
         self.v = v
+
+        R.play_sound("jump")
 
         for item in self.items:
             item.on_jump(self)
 
     def die(self):
-        pass
+        R.play_sound("player_death")
 
     def attack(self):
         if self.weapon != None:
@@ -112,6 +120,7 @@ class NinjaAnimetion:
         self.direction = RIGHT
         self.is_jumping = False
         self.is_attacking = False
+        self.is_unbeatable = False
         self.jumping_progress = 0
         self.falling_progress = 0
         self.attacking_progress = 0
@@ -135,6 +144,7 @@ class NinjaAnimetion:
         self.images["attacking_1"] = pygame.transform.scale(sprite_sheet.image_at(8, 3), self.size)
         self.images["attacking_2"] = pygame.transform.scale(sprite_sheet.image_at(9, 3), self.size)
         self.images["attacking_3"] = pygame.transform.scale(sprite_sheet.image_at(10, 3), self.size)
+        self.images["unbeatable"] = pygame.transform.scale(sprite_sheet.image_at(4, 10), self.size)
 
     def is_align_left_with(self, entity):
         return self.left() - 15 <= entity.right() and self.left() >= entity.left()
@@ -147,6 +157,9 @@ class NinjaAnimetion:
 
     def update_direction(self, direction):
         self.direction = direction
+
+    def update_is_unbeatable(self, enable):
+        self.is_unbeatable = enable
 
     def update(self, delta, v):
         if self.is_attacking:
@@ -206,6 +219,9 @@ class NinjaAnimetion:
                 image = self.images["falling_4"]
             else:
                 image = self.images["falling_5"]
+
+        if self.is_unbeatable:
+            image = self.images["unbeatable"]
 
         if self.direction == LEFT:
             image = pygame.transform.flip(image, True, False)

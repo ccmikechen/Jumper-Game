@@ -33,8 +33,9 @@ def seed(conn):
     (id INTEGER PRIMARY KEY, status TEXT)''')
 
     c.execute("INSERT INTO stages VALUES (1, 'available')")
-    c.execute("INSERT INTO stages VALUES (2, 'available')")
+    c.execute("INSERT INTO stages VALUES (2, 'locked')")
     c.execute("INSERT INTO stages VALUES (3, 'locked')")
+    c.execute("INSERT INTO stages VALUES (4, 'locked')")
 
     c.execute('''
     CREATE TABLE records

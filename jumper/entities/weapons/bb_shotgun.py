@@ -16,6 +16,7 @@ class BBShotgun(Weapon):
         env.add_bullet(BBBullet(env, (x, y), 90))
         env.add_bullet(BBBullet(env, (x, y), 70))
         env.add_bullet(BBBullet(env, (x, y), 110))
+        R.play_sound("shotgun")
 
     def get_color(self):
         return (0, 255, 255)

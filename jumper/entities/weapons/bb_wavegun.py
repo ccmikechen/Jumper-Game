@@ -14,6 +14,7 @@ class BBWavegun(Weapon):
         y = player.get_position().y + 30
 
         env.add_bullet(BBWaveBullet(env, (x, y), 90, speed=2000))
+        R.play_sound("wave_gun")
 
     def get_color(self):
         return (100, 255, 100)

@@ -60,10 +60,11 @@ class RankingFrame(Entity):
     def hide(self):
         self.is_hidden = True
 
-    def add_record(self, stage, time):
+    def add_record(self, stage, time, is_new_record):
         self._new_record_stage = stage
         self._new_record_time = time
         self.name_input.set_time(time)
+        self.name_input.set_is_new_record(is_new_record)
         self.is_show_name_input = True
 
     def on_name_submit(self, name):

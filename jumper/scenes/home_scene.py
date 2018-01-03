@@ -11,6 +11,9 @@ class HomeScene(Scene):
         self.background = Background(R.get_image("home_bg"), self.get_bound())
         self.information_ui = Information()
 
+    def reset(self, params):
+        R.play_music("home")
+
     def update(self, delta):
         self.background.update(delta)
         self.information_ui.update(delta)
@@ -23,19 +26,20 @@ class HomeScene(Scene):
 
     def on_key_down(self, key):
         if key == pygame.K_SPACE:
+            R.play_sound("confirm")
             self.start_and_reset_scene("menu")
 
 class Background(Entity):
     def __init__(self, image, size):
-        self.position = (0, 0)
-        self.speed = 100
+        self.speed = 150
         self.image = image
         self.size = size
 
         (w, h) = self.image.get_rect().size
+        self.position = (randint(0, w - size[0]), randint(0, h - size[1]))
         self.g_pos = (randint(0, w), randint(0, h))
         self.g_angle = randint(0, 360)
-        self.g_speed = 1000
+        self.g_speed = 1500
 
     def update(self, delta):
         w, h = self.image.get_rect().size

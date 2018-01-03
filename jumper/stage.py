@@ -6,9 +6,12 @@ class Stage:
         self.environment = environment
         self.info = StageInfo(environment.counter)
         self.background = (0, 0, 0)
+        self.music = None
+
         self.reset()
 
     def reset(self):
+        self.last_level = 0
         self.platforms = []
         self.items = []
         self.objects = []
@@ -53,6 +56,9 @@ class Stage:
     def get_info(self):
         return self.info
 
+    def get_music(self):
+        return self.music
+
     def get_next_stage(self):
         return None
 
@@ -62,7 +68,15 @@ class Stage:
     def get_mission_message(self):
         return ""
 
-    def update(self):
+    def get_next_stage_id(self):
+        return self.id + 1
+
+    def update(self, level):
         camera_pos = self.environment.camera.pos()
 
         self.platforms = list(filter(lambda p: p.get_position().y > camera_pos, self.platforms))
+
+        if level > self.last_level - 30:
+            pattern = self.pattern_gen.generate(self.last_level)
+            self.add_pattern(pattern)
+            self.last_level += pattern.get_levels()

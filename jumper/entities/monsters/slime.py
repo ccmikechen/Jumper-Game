@@ -56,6 +56,12 @@ class Slime(Monster):
         self.is_touchable = False
         self.is_damage = True
         self.damage_progress = 0.0
+        R.play_sound("slime_death")
 
     def on_attacked(self):
         self.die()
+
+    def on_steped(self, player):
+        super().on_steped(player)
+
+        R.play_sound("slime_step")

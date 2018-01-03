@@ -2,6 +2,7 @@ import pygame
 from jumper.env_entity import EnvEntity
 from math import sin, pi
 from random import randint
+from jumper.resource import R
 
 class Item(EnvEntity):
     def __init__(self, environment, position, name):
@@ -42,7 +43,10 @@ class Item(EnvEntity):
     def get_type(self):
         return 'item'
 
-    def active(self, player):
+    def active(self, player, sound=True):
+        if sound:
+            R.play_sound("get_item")
+
         player.add_item(self)
         self.is_touchable = False
         self.is_visible = False

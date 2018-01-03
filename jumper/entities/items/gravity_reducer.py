@@ -30,6 +30,6 @@ class GravityReducer(Item):
 
         self.timer.update()
 
-        if self.timer.get_time() > 10:
+        if self.timer.get_time() > 3:
             config.reset_G()
             self.destory(self.player)

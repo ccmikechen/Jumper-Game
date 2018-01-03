@@ -1,6 +1,11 @@
 from jumper.pattern import Pattern
 from jumper.entities.platforms.normal_platform import NormalPlatform
 from jumper.entities.platforms.weak_platform import WeakPlatform
+from jumper.entities.platforms.cloud_platform import CloudPlatform
+from jumper.entities.platforms.move_platform import MovePlatform
+from jumper.entities.platforms.move_weak_platform import MoveWeakPlatform
+from jumper.entities.platforms.move_cloud_platform import MoveCloudPlatform
+from jumper.entities.platforms.heavy_platform import HeavyPlatform
 from jumper.entities.monsters.slime import Slime
 from jumper.config import config
 from jumper.entities.weapons.bb_gun import BBGun
@@ -26,7 +31,7 @@ class PatternA3(Pattern):
             y = config.LEVEL_HEIGHT * (level + i * 3)
 
             if i - last_level >= 2 or state < 3:
-                self.platforms.append(NormalPlatform(env, (x, y)))
+                self.platforms.append(HeavyPlatform(env, (x, y)))
                 self.generate_weapon(env, x, y)
 
                 last_level = i
@@ -43,5 +48,3 @@ class PatternA3(Pattern):
         else:
             self.items.append(BBWavegun(env, (x + 30, y + 50)))
 
-    def generate_monster(self, env, x, y):
-        self.monsters.append(Slime(env, (x + 10, y + 50)))

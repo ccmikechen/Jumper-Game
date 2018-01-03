@@ -13,33 +13,22 @@ class Stage1(Stage):
         def generate(self, level):
             if level == 0:
                 return PatternA0(self.env, level)
-            # elif level < 100:
-            #     return PatternA1(self.env, level)
-            # elif level < 200:
-            #     return PatternA2(self.env, level)
+            elif level < 200:
+                return PatternA1(self.env, level)
             else:
-            #     return PatternA3(self.env, level)
                 return PatternA2(self.env, level)
 
     def __init__(self, environment):
         super().__init__(environment)
         self.pattern_gen = Stage1.PatternGen(environment)
-        self.last_level = 0
+
         self.background = R.get_image("stage1_bg")
+        self.music = "stage1"
         self.id = 1
 
-    def update(self, level):
-        super().update()
-        if level > self.last_level - 30:
-            pattern = self.pattern_gen.generate(self.last_level)
-            self.add_pattern(pattern)
-            self.last_level += pattern.get_levels()
-
     def check_mission(self, counter):
-        return counter.get_level() > 1000
+        return counter.get_level() >= 500
 
     def get_mission_message(self):
-        return "Go to 2000 level"
+        return ["Go to 500 level"]
 
-    def get_next_stage_id(self):
-        return 2

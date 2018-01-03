@@ -2,7 +2,6 @@ from jumper.pattern import Pattern
 from jumper.entities.platforms.normal_platform import NormalPlatform
 from jumper.entities.platforms.weak_platform import WeakPlatform
 from jumper.entities.items.spring_shoes import SpringShoes
-from jumper.entities.items.gravity_reducer import GravityReducer
 from jumper.config import config
 from random import randint
 
@@ -20,8 +19,7 @@ class PatternA2(Pattern):
 
         for i in range(0, 10):
             state = randint(0, 5)
-            x = randint(0, int((width - 100) / 50) * 50)
-            y = config.LEVEL_HEIGHT * (level + i * 3)
+            (x, y) = self.get_random_position(level + i * 3)
 
             if i - last_level >= 2 or state < 3:
                 self.platforms.append(NormalPlatform(env, (x, y)))
@@ -36,6 +34,4 @@ class PatternA2(Pattern):
 
         if p == 0:
             self.items.append(SpringShoes(env, (x + 30, y + 50)))
-        elif p == 1:
-            self.items.append(GravityReducer(env, (x + 30, y + 50)))
 

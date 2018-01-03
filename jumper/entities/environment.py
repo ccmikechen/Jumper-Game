@@ -4,12 +4,15 @@ from jumper.entities.player import Player
 from jumper.entities.ui.ranking_frame import RankingFrame
 from jumper.stages.stage1 import Stage1
 from jumper.stages.stage2 import Stage2
+from jumper.stages.stage3 import Stage3
+from jumper.stages.stage4 import Stage4
 from jumper.camera import Camera
 from jumper.config import config
 from jumper.timer import Timer
 from jumper.game_helper import show_text
 from jumper.game_counter import GameCounter
 from jumper.db.database import Database
+from jumper.resource import R
 
 DEFAULT_LEVEL = 12
 WHITE = (255, 255, 255)
@@ -30,6 +33,7 @@ class Environment(Entity):
 
     def reset(self, stage=None):
         self.counter.reset()
+        config.reset()
 
         stage_id = stage if stage != None else 1
 
@@ -37,7 +41,12 @@ class Environment(Entity):
             self.stage = Stage1(self)
         elif stage_id == 2:
             self.stage = Stage2(self)
+        elif stage_id == 3:
+            self.stage = Stage3(self)
+        elif stage_id == 4:
+            self.stage = Stage4(self)
 
+#        R.play_music(self.stage.get_music(), loops=1)
         self.timer.restart()
 
         self.is_pause = False
@@ -46,7 +55,6 @@ class Environment(Entity):
         self.is_clear = False
 
         self.level = DEFAULT_LEVEL
-        config.reset()
 
         self.ranking_frame.hide()
 
@@ -126,7 +134,13 @@ class Environment(Entity):
             return
 
         if key == pygame.K_BACKSPACE:
-            self.scene.start_scene("menu")
+            self.scene.start_and_reset_scene("menu")
+        if key == pygame.K_u:
+            self.player.toggle_unbeatable()
+        if key == pygame.K_j:
+            self.player.jump()
+        if key == pygame.K_l:
+            self._show_clear()
 
     def key_up(self, key):
         if not self.ranking_frame.is_hidden:
@@ -261,6 +275,7 @@ class Environment(Entity):
                 if self.player.is_dropping() and m.is_align_bottom_with(self.player):
                     m.on_steped(self.player)
             elif self.player.is_touch(m):
+                if self.player.is_unbeatable: continue
                 m.on_touched(self.player)
 
             self._check_bullets(delta, m)
@@ -277,27 +292,40 @@ class Environment(Entity):
 
     def _check_mission(self):
         if self.stage.check_mission(self.counter):
-            self.is_clear = True
-            self._show_ranking()
+            self._show_clear()
+
+    def _show_clear(self):
+        self.is_clear = True
+        next_stage_id = self.stage.get_next_stage_id()
+
+        if next_stage_id == None:
+            self.ranking_frame.disable_next_stage_option()
+        else:
+            self.db.set_stage(next_stage_id, "available")
+
+        self._show_ranking()
 
     def _show_ranking(self):
         ranking_data = self.db.get_records(self.stage.get_id())
 
         self.ranking_frame.update_ranking(ranking_data)
         self.ranking_frame.show()
-        print('show')
+
         if self.is_game_over:
             return
 
+        is_new_record = False
         if len(ranking_data) < 10 or self.counter.get_time() < ranking_data[9][2]:
-            self.ranking_frame.add_record(self.stage.get_id(), self.counter.get_time())
+            is_new_record = True
+
+        self.ranking_frame.add_record(self.stage.get_id(), self.counter.get_time(), is_new_record)
 
 
 class StartCounter(Entity):
     def __init__(self, env):
         self.env = env
         self.progress = 0.0
-
+        self.number = 0
         self._init_cover()
 
     def _init_cover(self):
@@ -311,6 +339,12 @@ class StartCounter(Entity):
     def update(self, delta):
         self.progress += delta
 
+        number = 3 - int(self.progress)
+        if self.number != number and number > 0:
+            R.play_sound("count")
+
+        self.number = number
+
     def render(self, surface):
         surface.blit(self.cover, (0, 0))
         self._render_mission_message(surface)
@@ -319,21 +353,21 @@ class StartCounter(Entity):
     def _render_mission_message(self, surface):
         msg = self.env.stage.get_mission_message()
         x = self.env.scene.get_bound()[0] / 2
-        y = 200
+        y = 100
 
-        show_text(surface, msg, WHITE, 50, (x, y), align_hor="center")
+        for i in range(0, len(msg)):
+            show_text(surface, msg[i], WHITE, 50, (x, y + i * 90), align_hor="center")
 
     def _render_count(self, surface):
         bw, bh = self.env.scene.get_bound()
 
         pygame.draw.rect(surface, BLACK, (0, bh/2 - 75, bw, 150))
 
-        number = 3 - int(self.progress)
         state = self.progress % 1.0
         font_size = int(max(80, 280 - 200 * state / 0.3))
 
         show_text(surface,
-                  str(number),
+                  str(self.number),
                   WHITE,
                   font_size,
                   (int(bw/2), int(bh/2)),
