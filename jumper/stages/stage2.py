@@ -32,7 +32,7 @@ class Stage2(Stage):
         self.id = 2
 
     def check_mission(self, counter):
-        return counter.get_item("Coin")["active"] >= 10
+        return counter.get_item("Coin")["active"] >= 5
 
     def get_mission_message(self):
-        return ["Find 10 coins"]
+        return ["Find 5 coins"]
